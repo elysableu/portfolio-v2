@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+/*
+ * Neon night palette. Deep blue-black surfaces with three neon accents.
+ * Muted text holds ≥ 7:1 contrast on the base background; accents are
+ * reserved for emphasis, never long-form body copy.
+ */
+@theme {
+  --color-night-950: #05060d;
+  --color-night-900: #0a0d1a;
+  --color-night-800: #111628;
+  --color-night-700: #1f2645;
+  --color-ink: #e8ebf7;
+  --color-ink-muted: #a3abc9;
+
+  --color-neon-cyan: #2ee6f6;
+  --color-neon-pink: #ff4fa3;
+  --color-neon-violet: #a879ff;
+  --color-neon-amber: #ffc857;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Snap section to section. Sections taller than the window still scroll
+       freely inside; snapping only engages near their edges. */
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 4rem; /* sticky header height: snaps land just below it */
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-night-950 font-sans text-ink antialiased;
+    /* City-at-night glow above a faint blueprint grid. */
+    background-image:
+      radial-gradient(60rem 30rem at 15% -10%, rgb(168 121 255 / 0.18), transparent 70%),
+      radial-gradient(50rem 25rem at 90% 0%, rgb(46 230 246 / 0.12), transparent 70%),
+      linear-gradient(rgb(31 38 69 / 0.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(31 38 69 / 0.35) 1px, transparent 1px);
+    background-size:
+      auto,
+      auto,
+      48px 48px,
+      48px 48px;
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: rgb(255 79 163 / 0.35);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-neon-cyan);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* A full-window page section: fills the viewport below the header so the
+   next section stays out of view, and its top is a snap point. svh keeps
+   the height stable as mobile browser toolbars show and hide. */
+@utility snap-section {
+  min-height: calc(100svh - 4rem);
+  scroll-snap-align: start;
+}
+
+@utility glow-cyan {
+  text-shadow:
+    0 0 6px rgb(46 230 246 / 0.55),
+    0 0 22px rgb(46 230 246 / 0.3);
+}
+
+@utility glow-pink {
+  text-shadow:
+    0 0 6px rgb(255 79 163 / 0.55),
+    0 0 22px rgb(255 79 163 / 0.3);
+}
+
+@utility neon-card {
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-night-700);
+  background-color: rgb(10 13 26 / 0.8);
+  backdrop-filter: blur(4px);
+  transition:
+    border-color 300ms,
+    box-shadow 300ms;
+
+  &:hover,
+  &:focus-within {
+    border-color: rgb(46 230 246 / 0.55);
+    box-shadow:
+      0 0 0 1px rgb(46 230 246 / 0.15),
+      0 0 32px -8px rgb(46 230 246 / 0.45);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
